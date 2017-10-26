@@ -1,5 +1,5 @@
 # Tour de France
-A simple energy based simulator to experimentally determine the successrate of a breakaway in the tour de france bike race. Part of Ph11 challenge.
+A simple energy based simulator to experimentally determine the successrate of a breakaway in the tour de france bike race. Part of Ph11 hurdle challenge.
 
 -------------------------
 usage:
