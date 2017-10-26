@@ -15,17 +15,15 @@ import java.util.Random;
 import java.lang.Math;
 
 public class biker{
-
+//default rider characterstics
 	private String biker_id = "tobeinitialized";
 	private String teammate_id = "tobeinitialized";
 
 	private double energy = 0;
 	private double energy_use_rate = 1;
-	private double energy_recovery_rate = 0;
 	private double position = 0;
 	private double timeElapsed= 0;
 	private double timeElapsedRate = 1;
-	private double energy_spent = 0;
 
 	private double default_energy = 0;
 	private double default_advancerate = 1;
@@ -43,20 +41,17 @@ public class biker{
 //team behavior
 	private boolean m_teamBehavior = false;
 	private double m_teammate_rate = 1;
-
-
+// define range for drafting
 	public final double draftingRangeUpper = 1;
 	public final double draftingRangeLower = .5;
-
-
-	//debug information
+//debug information
 	private final boolean m_debug = false;
 //constructor for default biker
 	public biker(){
 		energy = distance_competing ;
 		energy_use_rate = default_energy_use_rate;
 		position = default_position;
-		biker_id = getSaltString();
+		biker_id = getRandomName();
 		randomizeStats();
 	}
 	//constructor for a biker who needs some pre defined values
@@ -64,7 +59,6 @@ public class biker{
 		double _energy_use_rate, 
 		double _position, 
 		String _id){
-
 		energy = distance_competing + _extra_energy;
 		energy_use_rate = _energy_use_rate;
 		position = _position;
@@ -79,7 +73,6 @@ public class biker{
 		boolean _teambehavior,
 		String _teamate_id){
 		energy = distance_competing + _extra_energy;
-
 		energy_use_rate = _energy_use_rate;
 		position = _position;
 		biker_id = _id;
@@ -95,7 +88,7 @@ public class biker{
 		energy_use_rate += random_energy;
 	}
 	//genertates random names for drafting availiblity comparison
-	private String getSaltString() {
+	private String getRandomName() {
 		String SALTCHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
 		StringBuilder salt = new StringBuilder();
 		Random rnd = new Random();
@@ -120,9 +113,7 @@ public class biker{
     		updatePosition();
     		updateEnergy();
     		updateTime();
-
     	}
-
     }
 // an alternate version of the advance function which advances a biker 
     //exhibiting team behavior, instead of using optimal speed,
@@ -136,31 +127,30 @@ public class biker{
     		updatePosition();
     		updateEnergy();
     		updateTime();
-
     	}
-
     }
-
-
+//updates position
     private void updatePosition(){
     	position += getAdvancerate();
-		//System.out.println(getAdvancerate(_isDrafting));
     }
+//updates energy
     private void updateEnergy(){
     	energy -= getEenrgyUseRate();
-		//System.out.println("energy:" + energy);
+
     }
+//updates timestep
     private void updateTime(){
     	timeElapsed += timeElapsedRate;
     }
 
-
+//returns optimal or collaborative advance rate
     public double getAdvancerate(){
     	if(!m_teamBehavior){
     		return getOptimalRate();
     	}
     	return m_teammate_rate;
     }
+//returns energy used for current step forward
     private double getEenrgyUseRate(){
     	if(m_isDrafting){
     		return Math.pow(getAdvancerate(),3) * draftingEnergyUseMultiplier* energy_use_rate;
@@ -168,30 +158,34 @@ public class biker{
     	return Math.pow(getAdvancerate(),3) * energy_use_rate;
     }
 
-
+//checks whether the biker has stopped moving or has completed the race
     public boolean hasFinished(){
     	return position >= distance_to_race || energy < 0.1;
     }
+//checks whether the biker has crossed the finish line
     public boolean hasCompleteRace(){
     	return position >= distance_to_race;
     }
-
+//gets current position
     public double getPosition(){return position;}
 
-
+//for printing and data collection purposes
     public String getStats(){
     	return biker_id+"\'s time: " + Double.toString(timeElapsed)+
     	" Energy left: " + energy + "distance traveled: " + position + "efficiency: " + energy_use_rate;
 
     }
+//get biker name
     public String getName(){return biker_id;}
 
-
+    //computes optimal rate based on energy restraints and variable power compsumption based on 
+    //velocity against wind
     private double getOptimalRate(){
     	double optimalRateMultiplier = Math.sqrt(energy / (distance_competing - position));
     	return optimalRateMultiplier;
     }
-
+    //used in debugging to display stats
+    //to enable, set m_debug to true at top of file
     private void getStatsNow(){
     	System.out.println("################");
     	System.out.println("Name: " + biker_id);

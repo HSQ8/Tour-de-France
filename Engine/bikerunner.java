@@ -12,19 +12,18 @@ public class bikerunner{
 
 	private int randomPlayercount = 200;
 
-	public void bikerunner(int exp_number){
-		
+	public bikerunner(int exp_number){
+
 		for (int i = 0; i < randomPlayercount;i++)
 			bikers.add(new biker());
-		//bikers.add(new biker(0,1,1,0,"sam"));
 		//add biker teams here
 		bikerTeam.add(new biker(0,1,1,"servee0"));
 		bikerTeam.add(new biker(0,1,1.7,"servee1",true,"sam"));
 		bikerTeam.add(new biker(0,1,2.4,"servee2",true,"sam"));
 		bikerTeam.add(new biker(0,1,3.1,"servee3",true,"sam"));
-		//bikerTeam.add(new biker(0,1,3.8,"servee4",true,"sam"));
+		bikerTeam.add(new biker(0,1,3.8,"servee4",true,"sam"));
 
-
+//main loop to execute each race
 		while(!hasAllBikerFinished(bikers) || !hasAllBikerFinished(bikerTeam)){
 			if(m_debug)
 				System.out.println("########################################################################################");
@@ -47,11 +46,12 @@ public class bikerunner{
 			}
 			bikerTeam.get(0).advance();
 			for (int i = 1; i < bikerTeam.size(); i++){
+				// advances according to team behavior
 				bikerTeam.get(i).advance(bikerTeam.get(0).getAdvancerate());
 			}
 
 		}
-		
+		//data export section, saves experimental data to different files
 		try {
 			PrintStream out = new PrintStream(new FileOutputStream(exp_number + " - Normal.txt"));
 			PrintStream outTeam = new PrintStream(new FileOutputStream(exp_number + " - Team.txt"));
@@ -70,11 +70,13 @@ public class bikerunner{
 				}
 
 			}
+			// isBikerDrafting computes whether there is a biker close enough for the biker
+			// to draft behind to conserve energy
 
 			private boolean isBikerDrafting(biker _biker){
 				boolean isDrafting = false;
 				double distance = 0;
-
+				// checks whether is drafting among random players
 				for(biker i : bikers){
 					if(!i.getName().equals(_biker.getName())){
 						distance = i.getPosition() - _biker.getPosition();
@@ -87,7 +89,7 @@ public class bikerunner{
 						}
 					}
 				}
-
+				// checks whether is drafting among players in the team
 				for(biker i : bikerTeam){
 					if(!i.getName().equals(_biker.getName())){
 						distance = i.getPosition() - _biker.getPosition();
@@ -100,10 +102,10 @@ public class bikerunner{
 						}
 					}
 				}
-
 				return isDrafting;
 			}
-
+			//checks whether all bikers have either finished the race
+			//or has run out of energy to  travel forward
 			private boolean hasAllBikerFinished(ArrayList<biker> _bikers){
 				boolean hasfinished = true;
 				for(biker i : _bikers){
