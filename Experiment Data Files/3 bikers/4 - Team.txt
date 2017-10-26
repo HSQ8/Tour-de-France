@@ -1,0 +1,2 @@
+servee0's time: 173568.0 Energy left: 8.308483520998518distance traveled: 200000.02732415835efficiency: 1.0
+servee1's time: 173568.0 Energy left: 7810.962022803583distance traveled: 200001.0199265846efficiency: 1.0
